@@ -81,7 +81,10 @@ function(rcon)
          token=rcon$token,
          content='metadata',
          format='csv',.opts=curlOptions(ssl.verifyhost=FALSE))
-   x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
+   tcon <- textConnection(x)
+   x <- read.csv(tcon, stringsAsFactors=FALSE, na.strings="")
+   close(tcon)
+
    x$required_field <- as.integer(x$required_field)
    x
 }
@@ -299,7 +302,9 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
    x <- postForm(uri=rcon$url,.params=.params,
                  .opts=curlOptions(ssl.verifyhost=FALSE))
 
-   x <- read.csv(textConnection(x), stringsAsFactors=FALSE, na.strings="")
+   tcon <- textConnection(x)
+   x <- read.csv(tcon, stringsAsFactors=FALSE, na.strings="")
+   close(tcon)
 
    lapply(field_names,
           function(i) 
