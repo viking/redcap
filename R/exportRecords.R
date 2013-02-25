@@ -277,7 +277,7 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 }
 
 exportRecords.redcapApiConnection <- 
-function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
+function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL,raw=FALSE)
 {
    .params <- list(token=rcon$token, content='record',
                    format='csv', type='flat')
@@ -306,6 +306,9 @@ function(rcon,factors=TRUE,fields=NULL,forms=NULL,records=NULL,events=NULL)
 
    x <- postForm(uri=rcon$url,.params=.params,
                  .opts=curlOptions(ssl.verifyhost=FALSE))
+   if (raw) {
+      return(x)
+   }
 
    tcon <- textConnection(x)
    x <- read.csv(tcon, stringsAsFactors=FALSE, na.strings="")
